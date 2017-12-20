@@ -19,7 +19,7 @@ class NPDFeature():
         self.image = image.ravel()
         self.n_pixels = image.size
         self.features = numpy.empty(shape=self.n_pixels * (self.n_pixels - 1) // 2, dtype=float)
-
+        
     def extract(self):
         '''Extract features from given image.
 
