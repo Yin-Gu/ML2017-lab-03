@@ -7,6 +7,7 @@ class AdaBoostClassifier:
 
     alpha_array = None
     n_weakers_limit = None
+    weak_classifier = None
     weak_classifiers = []
     
     def __init__(self, weak_classifier, n_weakers_limit):
@@ -18,13 +19,11 @@ class AdaBoostClassifier:
         '''
         
         self.n_weakers_limit = n_weakers_limit
+        self.weak_classifier = weak_classifier
         
         for m in range(n_weakers_limit):
             self.weak_classifiers.append(weak_classifier(max_depth = 3))
         
-#        for i in range(self.n_weakers_limit):
-#            print(id(self.weak_classifiers[i]))
-
 
     def is_good_enough(self):
         '''Optional'''
@@ -72,8 +71,6 @@ class AdaBoostClassifier:
                 w[i] = w[i] * exp_array[i] / Zm
         
         self.alpha_array = alpha_array
-        
-        print(self.alpha_array)
         
 
     def predict_scores(self, X):
