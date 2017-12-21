@@ -10,7 +10,7 @@ from feature import NPDFeature
 from ensemble import AdaBoostClassifier
 import os
 # 设置当前路径
-os.chdir('F:/DataMining')  
+#os.chdir('F:/DataMining')  
 
 # 这里参数命名写的是matrix，个人习惯，其实是ndarray类型
 def extract_NPD(feature_matrix, label_matrix, path):
@@ -32,7 +32,7 @@ def extract_NPD(feature_matrix, label_matrix, path):
             image_file = image_file.convert('L').resize((24, 24))
             # 获取图片的像素值
             data_matrix = np.array(image_file.getdata())
-            data_matrix = data_matrix.reshape(24, 24)
+#            data_matrix = data_matrix.reshape(24, 24)
             # 调用feature.py里的NPDFeature抽取特征
             npd_feature = NPDFeature(data_matrix).extract()
             # 将特征作为一行加到参数feature_matrix中
@@ -71,6 +71,10 @@ def pre_process():
     mix_matrix = np.vstack((face_matrix, nonface_matrix))
     mix_labels = np.vstack((face_labels, nonface_labels))
     
+    del face_matrix
+    del nonface_matrix
+    del face_labels
+    del nonface_labels
     
     save(mix_matrix, 'datasets/features/mix_matrix')
     save(mix_labels, 'datasets/features/mix_labels') 
@@ -81,33 +85,34 @@ if __name__ == "__main__":
     print(datetime.datetime.now())
     pre_process()
     print(datetime.datetime.now())
-#    X = load('features/mix_matrix')
-#    y = load('features/mix_labels')    
-#    
-#    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
-#    
-#    del X
-#    del y
-#    
-#    print(datetime.datetime.now())
-#        
-#    ada_booster = AdaBoostClassifier(DecisionTreeClassifier, 5)
-#    ada_booster.fit(X_train, y_train)
-#    
-#    del X_train
-#    del y_train
-#    
-#    y_test = y_test.reshape(y_test.shape[0])
-#    
-#    y_predict = ada_booster.predict(X_test)
-#    
-#    report = classification_report(y_test, y_predict)
-#    
-#    file = open('report.txt', 'w')
-#    file.write(report)
-#    file.close()
-#    
-#    print(report)
-#    
-#    print(datetime.datetime.now())
+    
+    X = load('datasets/features/mix_matrix')
+    y = load('datasets/features/mix_labels')
+    
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+    
+    del X
+    del y
+    
+    print(datetime.datetime.now())
+        
+    ada_booster = AdaBoostClassifier(DecisionTreeClassifier, 5)
+    ada_booster.fit(X_train, y_train)
+    
+    del X_train
+    del y_train
+    
+    y_test = y_test.reshape(y_test.shape[0])
+    
+    y_predict = ada_booster.predict(X_test)
+    
+    report = classification_report(y_test, y_predict, target_names=["nonface", "face"])
+    
+    file = open('report.txt', 'w')
+    file.write(report)
+    file.close()
+    
+    print(report)
+    
+    print(datetime.datetime.now())
      
